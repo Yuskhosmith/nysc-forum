@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <link
+      rel="stylesheet"
+      href="style.css"
+    />
+    <title>Shagamu 24B</title>
+    <script>
+      let currentSort = { column: null, ascending: true };
+
+      function sortTable(columnIndex) {
+        const table = document.getElementById("leaderboard");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+        const isAscending =
+          currentSort.column === columnIndex ? !currentSort.ascending : true;
+
+        rows.sort((a, b) => {
+          const aVal = parseInt(a.cells[columnIndex].innerText);
+          const bVal = parseInt(b.cells[columnIndex].innerText);
+
+          return isAscending ? aVal - bVal : bVal - aVal;
+        });
+
+        // Re-attach sorted rows
+        rows.forEach((row) => tbody.appendChild(row));
+
+        // Update the current sort state
+        currentSort = { column: columnIndex, ascending: isAscending };
+
+        // Reset all sort icons and headers
+        const headers = table.querySelectorAll("th");
+        headers.forEach((header, index) => {
+          const icon = header.querySelector(".sort-icon");
+          if (icon) {
+            if (index === columnIndex) {
+              icon.textContent = isAscending ? "▲" : "▼";
+              header.classList.add("sorted");
+            } else {
+              icon.textContent = ""; // Clear other icons
+              header.classList.remove("sorted");
+            }
+          }
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="./index.html">Leaderboard</a></li>
+        <li><a href="./gallery.html">SAED Gallery</a></li>
+        <li><a href="./saed.html">SAED Registration</a></li>
+      </ul>
+    </nav>
+    <section>
+      <h2>Leaderboard</h2>
+      <table id="leaderboard">
+        <tr>
+          <th onclick="sortTable(0)">
+            Platoon <span class="sort-icon"></span>
+          </th>
+          <th onclick="sortTable(1)">Gold <span class="sort-icon"></span></th>
+          <th onclick="sortTable(2)">
+            Silver <span class="sort-icon"></span>
+          </th>
+          <th onclick="sortTable(3)">
+            Bronze <span class="sort-icon"></span>
+          </th>
+          <th onclick="sortTable(4)">Total <span class="sort-icon"></span></th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>3</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>15</td>
+        </tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>Competitions</h2>
+      <table>
+        <tr>
+          <th>Activity</th>
+          <th>Gold</th>
+          <th>Silver</th>
+          <th>Bronze</th>
+        </tr>
+        <tr>
+          <td>Big, Bold and Beautiful</td>
+          <td>Platoon 2</td>
+          <td>Platoon 8</td>
+          <td>Platoon 10</td>
+        </tr>
+        <tr>
+          <td>Miss Petite</td>
+          <td>Platoon 7</td>
+          <td>Platoon 3</td>
+          <td>Platoon 10</td>
+        </tr>
+        <tr>
+          <td>Volleyball</td>
+          <td>Platoon 6</td>
+          <td>Platoon 8</td>
+          <td>Platoon 9</td>
+        </tr>
+        <tr>
+          <td>Mr Fabulous</td>
+          <td>Platoon 1</td>
+          <td>Platoon 9</td>
+          <td>Platoon 10</td>
+        </tr>
+        <tr>
+          <td>Debate</td>
+          <td>Platoon 1</td>
+          <td>Platoon 3</td>
+          <td>Platoon 8</td>
+        </tr>
+        <tr>
+          <td>Parade</td>
+          <td>Platoon 8</td>
+          <td>Platoon 2</td>
+          <td>Platoon 1</td>
+        </tr>
+      </table>
+    </section>
+  </body>
+</html>
