@@ -16,8 +16,104 @@
     </nav>
 
     <section>
-        
+        <canvas id="pieChart" width="400" height="400"></canvas>
+        <div id="tooltip" class="tooltip"></div>
     </section>
+
+    <script>
+        // JSON data representing skills and their counts
+        const skills = [
+            { name: "Agro-allied", count: 76 },
+            { name: "Ankara Craft", count: 31 },
+            { name: "Barbing", count: 82 },
+            { name: "Bead making", count: 88 },
+            { name: "CCTV installation", count: 30 },
+            { name: "Cosmetology", count: 10 },
+            { name: "Culinary and catering services", count: 173 },
+            { name: "Electrical installation", count: 4 },
+            { name: "Event planning & Management", count: 17 },
+            { name: "Fashion Designing", count: 39 },
+            { name: "Film and Photography", count: 109 },
+            { name: "ICT", count: 93 },
+            { name: "Laundry and dry cleaning", count: 9 },
+            { name: "Makeup and Gele", count: 12 },
+            { name: "Paint production", count: 32 },
+            { name: "Phone repairs", count: 19 },
+            { name: "Solar installation", count: 77 },
+            { name: "Tie and Dye", count: 34 },
+        ];
+
+        const canvas = document.getElementById("pieChart");
+        const ctx = canvas.getContext("2d");
+        const tooltip = document.getElementById("tooltip");
+        
+        // Calculate total count
+        const totalCount = skills.reduce((sum, skill) => sum + skill.count, 0);
+
+        // Draw the pie chart
+        function drawPieChart() {
+            let startAngle = 0;
+            skills.forEach((skill, index) => {
+                // Calculate the end angle for the current slice
+                const sliceAngle = (skill.count / totalCount) * 2 * Math.PI;
+                const endAngle = startAngle + sliceAngle;
+
+                // Set a color for each slice
+                ctx.fillStyle = `hsl(${index * 360 / skills.length}, 70%, 60%)`;
+
+                // Draw the slice
+                ctx.beginPath();
+                ctx.moveTo(200, 200); // Center of the pie
+                ctx.arc(200, 200, 200, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fill();
+
+                // Calculate the mid angle for placing the percentage text
+                const midAngle = startAngle + sliceAngle / 2;
+                const percentage = ((skill.count / totalCount) * 100).toFixed(2);
+
+                // Position the percentage text
+                const textX = 200 + Math.cos(midAngle) * 120; // 120 is a distance from the center
+                const textY = 200 + Math.sin(midAngle) * 120;
+                ctx.fillStyle = "#fff"; // Set text color
+                ctx.font = "8px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(`${percentage}%`, textX, textY);
+
+                // Save the slice's data for hover detection
+                skill.startAngle = startAngle;
+                skill.endAngle = endAngle;
+
+                // Update the start angle for the next slice
+                startAngle = endAngle;
+            });
+        }
+
+        drawPieChart();
+
+        // Hover detection and tooltip display
+        canvas.addEventListener("mousemove", (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left - 200; // Adjust for canvas center
+            const y = event.clientY - rect.top - 200;  // Adjust for canvas center
+            const angle = Math.atan2(y, x);
+
+            const adjustedAngle = angle < 0 ? angle + 2 * Math.PI : angle;
+
+            const hoveredSkill = skills.find(skill => adjustedAngle >= skill.startAngle && adjustedAngle <= skill.endAngle);
+
+            if (hoveredSkill) {
+                const percentage = ((hoveredSkill.count / totalCount) * 100).toFixed(2);
+                tooltip.innerText = `${hoveredSkill.name}: ${hoveredSkill.count} (${percentage}%)`;
+                tooltip.style.display = "block";
+                tooltip.style.left = `${event.clientX}px`;
+                tooltip.style.top = `${event.clientY}px`;
+            } else {
+                tooltip.style.display = "none";
+            }
+        });
+    </script>
 
 </body>
 </html>
